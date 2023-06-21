@@ -1,14 +1,17 @@
 require('express-async-errors');
+require('dotenv/config');
 
 const express = require('express');
 
 const AppError = require('./utils/AppError');
 
-const express = require('express');
+const routes = require('./routes');
 
 const app = express();
 
 app.use(express.json());
+
+app.use(routes);
 
 app.use((error, resquest, response, next) => {
   if (error instanceof AppError) {
