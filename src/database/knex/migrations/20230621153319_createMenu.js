@@ -3,8 +3,8 @@ exports.up = knex => knex.schema.createTable('menu', table => {
   table.text('name');
   table.text('description');
   table.text('dish_image').references('image').inTable('dishes');
-  table.decimal('dish_price', 8, 2);
-  table.text('categoy_dish');
+  table.decimal('price', 8, 2);
+  table.text('category');
 });
 
 exports.down = knex => knex.schema.dropTable('menu');
