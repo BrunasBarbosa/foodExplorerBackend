@@ -33,6 +33,10 @@ class IngredientsRepository {
 
     return await knex('ingredients_dish').insert(data);
   }
+
+  async deleteIngredientsIds(dishId) {
+    return await knex('ingredients_dish').where({ dish_id: dishId }).delete();
+  }
 }
 
 module.exports = IngredientsRepository;

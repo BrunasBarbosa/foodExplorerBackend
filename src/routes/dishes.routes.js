@@ -10,5 +10,6 @@ const dishesController = new DishesController();
 
 dishesRoutes.use(ensureAdminAuthenticated);
 dishesRoutes.post('/', dishesController.create);
+dishesRoutes.put('/:id', dishesController.update);
 
 module.exports = dishesRoutes;
