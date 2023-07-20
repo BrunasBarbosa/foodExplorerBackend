@@ -1,18 +1,17 @@
-const DishImageService = require('../services/dishe/DishImageService');
+const UpdateImageService = require('../services/upload/UpdateImageService');
 const DishRepository = require('../repositories/DishRepository');
 
+const dishRepository = new DishRepository();
+const updateImageService = new UpdateImageService(dishRepository);
 class DishImageController {
   async update(request, response) {
     const userId = request.user.id;
     const { id } = request.params;
     const imageFileName = request.file.filename;
 
-    const dishRepository = new DishRepository();
-    const dishImageService = new DishImageService(dishRepository);
+    const dishUpdated = await updateImageService.execute(id, imageFileName, userId);
 
-    const dish = await dishImageService.execute(id, imageFileName, userId);
-    
-    return response.json(dish);
+    return response.json(dishUpdated);
   }
 }
 

@@ -13,8 +13,12 @@ class DishRepository {
     return dishId.id;
   }
 
+  async imageUpload(image, dishId) {
+    return await knex('dishes').update({ image }).where({ id: dishId });
+  }
+
   async imageUpdate({ dish, id, userId }) {
-    await knex('dishes').update({...dish, updated_by: knex.raw('?', [userId]), updated_at: knex.fn.now()}).where({ id });
+    await knex('dishes').update({ ...dish, updated_by: userId, updated_at: knex.fn.now() }).where({ id });
   }
 
   async update({ dishId, name, description, price, category, userId }) {
