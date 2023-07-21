@@ -38,6 +38,13 @@ class DishRepository {
 
     return dish;
   }
+
+  async delete(id) {
+    return await knex.transaction(async trx => {
+      await knex('dishes').transacting(trx).where({ id }).delete();
+      await knex('menu').transacting(trx).where({ dish_id: id }).delete();
+    });
+  }
 }
 
 module.exports = DishRepository;

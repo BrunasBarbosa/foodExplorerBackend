@@ -1,5 +1,6 @@
 const DishCreateService = require('../services/dishe/DishCreateService');
 const DishUpdateService = require('../services/dishe/DishUpdateService');
+const DishDeleteService = require('../services/dishe/DishDeleteService');
 const UploadImageService = require('../services/upload/UploadImageService');
 const UpdateImageService = require('../services/upload/UpdateImageService');
 
@@ -65,6 +66,16 @@ class DishesController {
     if (ingredients.length !== 0) {
       await ingredientsInsertService.execute({ dishId: id, ingredients });
     }
+
+    return response.json();
+  }
+
+  async delete(request, response) {
+    const { id } = request.params;
+
+    const dishDeleteService = new DishDeleteService(dishRepository);
+
+    await dishDeleteService.execute(id);
 
     return response.json();
   }

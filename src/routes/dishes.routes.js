@@ -15,5 +15,6 @@ const dishesController = new DishesController();
 dishesRoutes.use(ensureAdminAuthenticated);
 dishesRoutes.post('/', upload.single('image'), dishesController.create);
 dishesRoutes.put('/:id', upload.single('image'), dishesController.update);
+dishesRoutes.delete('/:id', dishesController.delete);
 
 module.exports = dishesRoutes;
