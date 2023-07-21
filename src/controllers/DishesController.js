@@ -45,15 +45,15 @@ class DishesController {
   }
 
   async update(request, response) {
+    const dishUpdateService = new DishUpdateService(dishRepository);
+    const updateImageService = new UpdateImageService(dishRepository);
+
     const userId = request.user.id;
     const { id } = request.params;
 
     const fileName = request.file?.filename ?? null;
 
     const { name, description, price, category, ingredients } = request.body;
-
-    const dishUpdateService = new DishUpdateService(dishRepository);
-    const updateImageService = new UpdateImageService(dishRepository);
 
     await dishUpdateService.execute({ dishId: id, name, description, price, category, userId });
 
@@ -71,9 +71,9 @@ class DishesController {
   }
 
   async delete(request, response) {
-    const { id } = request.params;
-
     const dishDeleteService = new DishDeleteService(dishRepository);
+    
+    const { id } = request.params;
 
     await dishDeleteService.execute(id);
 

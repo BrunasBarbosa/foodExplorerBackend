@@ -11,6 +11,16 @@ class IngredientsRepository {
     return null;
   }
 
+  async fetchIngredientsByDishId(dishId) {
+    const dishIngredients = await knex('dishes')
+      .select('ingredients.name')
+      .join('ingredients_dish', 'dishes.id', 'ingredients_dish.dish_id')
+      .join('ingredients', 'ingredients_dish.ingredients_id', 'ingredients.id')
+      .where('dishes.id', dishId);
+
+    return dishIngredients;
+  }
+
   async insertIngredients(name) {
     const registeredIngredient = await this.fetchIngredients(name);
 
