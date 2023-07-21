@@ -39,6 +39,24 @@ class DishRepository {
     return dish;
   }
 
+  async findByIngredient(ingredient) {
+    const dishes = await knex('dishes')
+      .select('dishes.name')
+      .join('ingredientes_dish', 'dishes.id', 'ingredientes_dish.dish_id')
+      .join('ingredients', 'ingredients_dish.ingredients_id', 'ingredients.id')
+      .whereLike('ingredients.name', `%${ingredient}%`)
+      .orderBy('dishes.name');
+
+    return dishes;
+  }
+
+  async findByName(name) {
+    const dishes = await knex('dishes')
+      .whereLike('name', `%${name}%`)
+      .orderBy('name');
+    return dishes;
+  }
+
   async delete(id) {
     return await knex.transaction(async trx => {
       await knex('dishes').transacting(trx).where({ id }).delete();

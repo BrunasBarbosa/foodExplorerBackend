@@ -72,9 +72,10 @@ class DishesController {
   }
 
   async show(request, response) {
-    const { id } = request.params;
-
     const dishShowService = new DishShowService(dishRepository);
+    
+    const { id } = request.params;
+    
     const details = await dishShowService.execute(id);
 
     return response.json(details);
