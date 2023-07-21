@@ -9,7 +9,7 @@ class UpdateImageService {
   async execute(id, filename, userId) {
     try {
       const dish = await this.dishRepository.findById(id);
-      console.log(dish);
+      
       const diskStorage = new DiskStorage();
 
       if (!dish) {
@@ -24,7 +24,7 @@ class UpdateImageService {
 
       dish.image = fileName;
 
-      const dishImageUpdated = await this.dishRepository.imageUpdate({ dish, id: dish.id, userId });
+      const dishImageUpdated = await this.dishRepository.imageUpdate({ dish, userId });
 
       return dishImageUpdated;
 

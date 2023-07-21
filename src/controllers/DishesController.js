@@ -1,6 +1,8 @@
 const DishCreateService = require('../services/dishe/DishCreateService');
 const DishUpdateService = require('../services/dishe/DishUpdateService');
 const UploadImageService = require('../services/upload/UploadImageService');
+const UpdateImageService = require('../services/upload/UpdateImageService');
+
 const DishRepository = require('../repositories/DishRepository');
 
 const MenuInsertService = require('../services/menu/MenuInsertService');
@@ -11,7 +13,6 @@ const IngredientsRepository = require('../repositories/IngredientsRepository');
 
 const ingredientsRepository = new IngredientsRepository();
 const ingredientsInsertService = new IngredientsInsertService(ingredientsRepository);
-
 
 const dishRepository = new DishRepository();
 
@@ -29,11 +30,11 @@ class DishesController {
 
     const dishId = await dishCreateService.execute({ name, description, price, category, id: userId });
 
+    await menuInsertService.execute({ dishId, name, description, price, category });
+
     if (fileName !== null) {
       await uploadImageService.execute(fileName, dishId);
     }
-
-    await menuInsertService.execute({ dishId, name, description, price, category });
 
     if (ingredients.length !== 0) {
       await ingredientsInsertService.execute({ dishId, ingredients });
@@ -46,11 +47,18 @@ class DishesController {
     const userId = request.user.id;
     const { id } = request.params;
 
+    const fileName = request.file?.filename ?? null;
+
     const { name, description, price, category, ingredients } = request.body;
 
     const dishUpdateService = new DishUpdateService(dishRepository);
+    const updateImageService = new UpdateImageService(dishRepository);
 
     await dishUpdateService.execute({ dishId: id, name, description, price, category, userId });
+
+    if (fileName !== null) {
+      await updateImageService.execute(id, fileName, userId);
+    }
 
     await ingredientsRepository.deleteIngredientsIds(id);
 
