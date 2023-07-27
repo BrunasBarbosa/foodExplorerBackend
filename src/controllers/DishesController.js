@@ -2,6 +2,7 @@ const DishCreateService = require('../services/dishe/DishCreateService');
 const DishUpdateService = require('../services/dishe/DishUpdateService');
 const DishDeleteService = require('../services/dishe/DishDeleteService');
 const DishShowService = require('../services/dishe/DishShowService');
+const DishIndexService = require('../services/dishe/DishIndexService');
 const UploadImageService = require('../services/upload/UploadImageService');
 const UpdateImageService = require('../services/upload/UpdateImageService');
 
@@ -73,12 +74,22 @@ class DishesController {
 
   async show(request, response) {
     const dishShowService = new DishShowService(dishRepository);
-    
+
     const { id } = request.params;
-    
+
     const details = await dishShowService.execute(id);
 
     return response.json(details);
+  }
+
+  async index(request, response) {
+    const dishIndexService = new DishIndexService(dishRepository);
+
+    const { name } = request.query;
+
+    const dishes = await dishIndexService.execute(name);
+
+    return response.json(dishes);
   }
 
   async delete(request, response) {
